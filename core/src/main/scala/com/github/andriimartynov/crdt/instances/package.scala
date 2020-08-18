@@ -5,7 +5,7 @@ package object instances {
   object counter  extends CounterInstances
   object int      extends IntInstances
   object map      extends MapInstances
-  object register extends RegisterInstances
+  object register extends RegisterInstances with RegisterInstancesBinCompat0
   object set      extends SetInstances
 
 }

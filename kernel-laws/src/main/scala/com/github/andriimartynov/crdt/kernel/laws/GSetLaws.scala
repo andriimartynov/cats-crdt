@@ -5,7 +5,6 @@ import cats.kernel.{ BoundedSemilattice, Monoid }
 import com.github.andriimartynov.crdt.kernel.sets.GSet
 
 trait GSetLaws[T] extends CRDTLaws[Set[T], T] {
-
   implicit def S: GSet[T]
 
   implicit def B: BoundedSemilattice[Set[T]]

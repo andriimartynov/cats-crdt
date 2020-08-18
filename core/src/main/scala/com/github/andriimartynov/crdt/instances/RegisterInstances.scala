@@ -1,10 +1,11 @@
 package com.github.andriimartynov.crdt.instances
 
-import cats.kernel.{ BoundedSemilattice, Eq, Monoid }
+import cats.kernel.{ BoundedSemilattice, Eq }
 import cats.syntax.all._
+import cats.{ Functor, Show }
 import com.github.andriimartynov.crdt.LWWRegister.LWWRegisterOp
 import com.github.andriimartynov.crdt.NodeId.NodeId
-import com.github.andriimartynov.crdt.{ LWWRegister, Timestamp }
+import com.github.andriimartynov.crdt.Timestamp
 
 trait RegisterInstances {
   implicit def catsStdBoundedSemiLatticeForLWWRegisterOp[T](implicit
@@ -35,22 +36,17 @@ trait RegisterInstances {
           x1.value === x2.value
     }
 
-  implicit def lwwRegisterInstance[T]: LWWRegister[T] =
-    new LWWRegister[T] {
-      override def add(
-        t: LWWRegisterOp[T],
-        op: LWWRegisterOp[T]
-      )(implicit
-        m: Monoid[LWWRegisterOp[T]]
-      ): LWWRegisterOp[T] = t |+| op
-
-      override def merge(
-        t1: LWWRegisterOp[T],
-        t2: LWWRegisterOp[T]
-      )(implicit
-        b: BoundedSemilattice[LWWRegisterOp[T]]
-      ): LWWRegisterOp[T] = t1 |+| t2
-
+  implicit def catsStdFunctorForLWWRegisterOp[T]: Functor[LWWRegisterOp] =
+    new Functor[LWWRegisterOp] {
+      override def map[A, B](fa: LWWRegisterOp[A])(f: A => B): LWWRegisterOp[B] =
+        fa.copy(value = f(fa.value))
     }
+
+  implicit def catsStdShowForLWWRegisterOp[T](implicit
+    s: Show[T]
+  ): Show[LWWRegisterOp[T]] =
+    Show.show[LWWRegisterOp[T]](op =>
+      s"LWWRegisterOp(${op.nodeId}, ${op.timestamp}, ${op.value.show})"
+    )
 
 }

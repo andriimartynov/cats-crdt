@@ -1,12 +1,15 @@
 package com.github.andriimartynov.crdt.instances
 
 import cats.instances.int.catsKernelStdOrderForInt
+import cats.instances.long.catsKernelStdOrderForLong
 import cats.kernel.BoundedSemilattice
+import cats.kernel.laws.discipline.EqTests
+import cats.laws.discipline.FunctorTests
+import com.github.andriimartynov.crdt.LWWRegister.LWWRegisterOp
 import com.github.andriimartynov.crdt.instances.all._
 import com.github.andriimartynov.crdt.kernel.laws.discipline.LWWRegisterTests
-import com.github.andriimartynov.crdt.LWWRegister.LWWRegisterOp
 import com.github.andriimartynov.crdt.{ longToLongOps, NodeId }
-import org.scalacheck.Arbitrary.arbInt
+import org.scalacheck.Arbitrary.{ arbInt, arbLong, arbString, arbitrary }
 import org.scalacheck.Gen.oneOf
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalatest.flatspec.AnyFlatSpecLike
@@ -17,13 +20,25 @@ class RegisterLawsSpec extends AnyFlatSpecLike with Configuration with FlatSpecD
 
   import RegisterLawsSpec._
 
-  implicit val nodeId = NodeId.create()
+  implicit val nodeId: NodeId = NodeId.create()
 
+  checkAll("LWWRegisterOp.EqLaws", EqTests[LWWRegisterOp[Int]].eqv)
+  checkAll("LWWRegisterOp.FunctorLaws", FunctorTests[LWWRegisterOp].functor[Int, String, Long])
   checkAll("Register.LWWRegisterLaws", LWWRegisterTests[Int].register)
 
 }
 
 object RegisterLawsSpec {
+
+  implicit def arb[T: Arbitrary](implicit
+    a: Arbitrary[LWWRegisterOp[T]]
+  ): Arbitrary[LWWRegisterOp[T] => LWWRegisterOp[T]] =
+    Arbitrary(
+      arbitrary[LWWRegisterOp[T]] map (_ =>
+        (x: LWWRegisterOp[T]) => x.copy(timestamp = (x.timestamp + 5L).asTimestamp)
+      )
+    )
+
   implicit def arbRegisterOp[T: Arbitrary](implicit
     b: BoundedSemilattice[LWWRegisterOp[T]]
   ): Arbitrary[LWWRegisterOp[T]] = {

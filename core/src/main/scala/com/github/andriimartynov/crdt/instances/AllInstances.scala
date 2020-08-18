@@ -5,4 +5,5 @@ trait AllInstances
     with IntInstances
     with MapInstances
     with RegisterInstances
+    with RegisterInstancesBinCompat0
     with SetInstances
