@@ -1,13 +1,13 @@
 package com.github.andriimartynov.crdt.kernel.laws
 
-import cats.kernel.laws.{IsEq, IsEqArrow}
-import cats.kernel.{BoundedSemilattice, Monoid}
+import cats.kernel.laws.{ IsEq, IsEqArrow }
+import cats.kernel.BoundedSemilattice
 import com.github.andriimartynov.crdt.kernel.NodeId.NodeId
 import com.github.andriimartynov.crdt.kernel.counters.GCounter
-import com.github.andriimartynov.crdt.kernel.counters.GCounter.GCounterOp
-import com.github.andriimartynov.crdt.kernel.{KeyValueStore, NodeId}
+import com.github.andriimartynov.crdt.kernel.counters.CounterCRDT.CounterOp
+import com.github.andriimartynov.crdt.kernel.{ KeyValueStore, NodeId }
 
-trait GCounterLaws[F[NodeId, Int]] extends CounterCRDTLaws[F[NodeId, Int], GCounterOp] {
+trait GCounterLaws[F[NodeId, Int]] extends CounterCRDTLaws[F[NodeId, Int]] {
   implicit def S: GCounter[F]
 
   implicit def B: BoundedSemilattice[F[NodeId, Int]]
@@ -16,23 +16,20 @@ trait GCounterLaws[F[NodeId, Int]] extends CounterCRDTLaws[F[NodeId, Int], GCoun
 
   implicit val nodeId: NodeId = NodeId.create()
 
-  def add(x: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
-    S.add(x, GCounterOp(1, nodeId)) <-> K.update(x)(nodeId, K.get(x)(nodeId).fold(1)(_ max 1))
+  def add0(x: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
+    S.add(x, CounterOp(nodeId, 1)) <-> K.update(x)(nodeId, K.get(x)(nodeId).fold(1)(_ + 1))
 
-  def increment(x: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
-    S.increment(x)(1) <-> K.update(x)(nodeId, K.get(x)(nodeId).fold(1)(_ max 1))
+  def add1(x: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
+    S.add(x, CounterOp(nodeId, -1)) <-> K.update(x)(nodeId, K.get(x)(nodeId).fold(0)(_ + 0))
+
+  def increment0(x: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
+    S.increment(x)(1) <-> K.update(x)(nodeId, K.get(x)(nodeId).fold(1)(_ + 1))
+
+  def increment1(x: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
+    S.increment(x)(-1) <-> K.update(x)(nodeId, K.get(x)(nodeId).fold(0)(_ + 0))
 
   def merge(x1: F[NodeId, Int], x2: F[NodeId, Int]): IsEq[F[NodeId, Int]] =
-    S.merge(x1, x2) <-> K
-      .keys(x2)
-      .foldLeft(x1) {
-        case (map, key) =>
-          K.update(map)(
-            key,
-            K.get(map)(key)
-              .fold(K.get(x2)(key).get)(_ max K.get(x2)(key).get)
-          )
-      }
+    S.merge(x1, x2) <-> mergeKVS(x1, x2)
 
   def total(x: F[NodeId, Int]): IsEq[Int] =
     S.total(x) <-> K.values(x).sum

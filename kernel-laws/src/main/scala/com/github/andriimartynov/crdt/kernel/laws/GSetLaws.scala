@@ -11,7 +11,7 @@ trait GSetLaws[T] extends CRDTLaws[Set[T], T] {
 
   implicit def M: Monoid[T]
 
-  override def add(x: Set[T]): IsEq[Set[T]] =
+  override def add0(x: Set[T]): IsEq[Set[T]] =
     S.add(x, M.empty) <-> x + M.empty
 
   override def merge(x1: Set[T], x2: Set[T]): IsEq[Set[T]] =

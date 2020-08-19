@@ -21,10 +21,12 @@ trait GCounterTests[F[NodeId, Int]] extends Laws {
     new DefaultRuleSet(
       "GCounter",
       None,
-      "add"       -> forAll(laws.add _),
-      "increment" -> forAll(laws.increment _),
-      "merge"     -> forAll(laws.merge _),
-      "total"     -> forAll(laws.total _)
+      "add0"        -> forAll(laws.add0 _),
+      "add1"        -> forAll(laws.add1 _),
+      "increment0" -> forAll(laws.increment0 _),
+      "increment1" -> forAll(laws.increment1 _),
+      "merge"      -> forAll(laws.merge _),
+      "total"      -> forAll(laws.total _)
     )
 
 }
