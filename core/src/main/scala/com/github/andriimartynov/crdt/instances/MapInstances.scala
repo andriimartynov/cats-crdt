@@ -35,7 +35,7 @@ trait MapInstances {
 
       override def keys[K, V](
         map: Map[K, V]
-      ): Iterator[K] = map.keysIterator
+      ): Iterable[K] = map.keys
 
       override def update[K, V](
         map: Map[K, V]

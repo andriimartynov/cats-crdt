@@ -26,6 +26,7 @@ trait GCounterTests[F[NodeId, Int]] extends Laws {
       "merge"     -> forAll(laws.merge _),
       "total"     -> forAll(laws.total _)
     )
+
 }
 
 object GCounterTests {
