@@ -18,7 +18,7 @@ trait GSetTests[T] extends Laws {
     new DefaultRuleSet(
       "GSet",
       None,
-      "add"   -> forAll(laws.add _),
+      "add0"   -> forAll(laws.add0 _),
       "merge" -> forAll(laws.merge _)
     )
 

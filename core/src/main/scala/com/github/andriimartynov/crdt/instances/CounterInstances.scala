@@ -2,7 +2,7 @@ package com.github.andriimartynov.crdt.instances
 
 import cats.kernel.{ BoundedSemilattice, Monoid }
 import cats.syntax.semigroup._
-import com.github.andriimartynov.crdt.GCounter.GCounterOp
+import com.github.andriimartynov.crdt.CounterCRDT.CounterOp
 import com.github.andriimartynov.crdt.{ GCounter, KeyValueStore }
 import com.github.andriimartynov.crdt.NodeId.NodeId
 import com.github.andriimartynov.crdt.syntax.kvs.catsSyntaxKvs
@@ -14,10 +14,11 @@ trait CounterInstances {
     new GCounter[F] {
       def add(
         t: F[NodeId, Int],
-        op: GCounterOp
+        op: CounterOp
       )(implicit
         m: Monoid[F[NodeId, Int]]
-      ): F[NodeId, Int] = t.update(op.nodeId, t.get(op.nodeId).fold(op.inc)(_ + op.inc))
+      ): F[NodeId, Int] =
+        t.update(op.nodeId, t.get(op.nodeId).fold(math.max(0, op.value))(_ + math.max(0, op.value)))
 
       def increment(
         t: F[NodeId, Int]
@@ -26,7 +27,7 @@ trait CounterInstances {
       )(implicit
         m: Monoid[F[NodeId, Int]],
         nodeId: NodeId
-      ): F[NodeId, Int] = add(t, GCounterOp(i, nodeId))
+      ): F[NodeId, Int] = add(t, CounterOp(nodeId, i))
 
       def merge(
         t1: F[NodeId, Int],

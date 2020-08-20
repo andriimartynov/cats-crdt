@@ -19,7 +19,8 @@ trait LWWRegisterTests[T] extends Laws {
     new DefaultRuleSet(
       "LWWRegister",
       None,
-      "add"   -> forAll(laws.add _),
+      "add0"   -> forAll(laws.add0 _),
+      "add1"   -> forAll(laws.add1 _),
       "merge" -> forAll(laws.merge _)
     )
 

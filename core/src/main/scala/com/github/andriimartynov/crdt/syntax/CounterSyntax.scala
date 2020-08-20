@@ -1,7 +1,7 @@
 package com.github.andriimartynov.crdt.syntax
 
 import cats.kernel.{ BoundedSemilattice, Monoid }
-import com.github.andriimartynov.crdt.GCounter.GCounterOp
+import com.github.andriimartynov.crdt.CounterCRDT.CounterOp
 import com.github.andriimartynov.crdt.{ GCounter, KeyValueStore }
 import com.github.andriimartynov.crdt.NodeId.NodeId
 
@@ -23,7 +23,7 @@ final class GCounterOps[F[NodeId, Int]](private val kvs: F[NodeId, Int]) extends
   ): F[NodeId, Int] = increment(i)
 
   def add(
-    op: GCounterOp
+    op: CounterOp
   )(implicit
     c: GCounter[F],
     k: KeyValueStore[F],
@@ -51,13 +51,5 @@ final class GCounterOps[F[NodeId, Int]](private val kvs: F[NodeId, Int]) extends
     c: GCounter[F],
     k: KeyValueStore[F]
   ): Int = GCounter[F].total(kvs)
-
-  def unary_+(implicit
-    c: GCounter[F],
-    k: KeyValueStore[F],
-    m: Monoid[F[NodeId, Int]],
-    nodeId: NodeId
-  ): F[NodeId, Int] =
-    increment(1)
 
 }

@@ -9,7 +9,7 @@ trait CRDTLaws[T, OpT] {
 
   implicit def B: BoundedSemilattice[T]
 
-  def add(x: T): IsEq[T]
+  def add0(x: T): IsEq[T]
 
   def merge(x1: T, x2: T): IsEq[T]
 

@@ -30,14 +30,8 @@ class RegisterLawsSpec extends AnyFlatSpecLike with Configuration with FlatSpecD
 
 object RegisterLawsSpec {
 
-  implicit def arb[T: Arbitrary](implicit
-    a: Arbitrary[LWWRegisterOp[T]]
-  ): Arbitrary[LWWRegisterOp[T] => LWWRegisterOp[T]] =
-    Arbitrary(
-      arbitrary[LWWRegisterOp[T]] map (_ =>
-        (x: LWWRegisterOp[T]) => x.copy(timestamp = (x.timestamp + 5L).asTimestamp)
-      )
-    )
+  implicit def arb[T: Arbitrary]: Arbitrary[LWWRegisterOp[T] => LWWRegisterOp[T]] =
+    Arbitrary((x: LWWRegisterOp[T]) => x.copy(timestamp = (x.timestamp + 5L).asTimestamp))
 
   implicit def arbRegisterOp[T: Arbitrary](implicit
     b: BoundedSemilattice[LWWRegisterOp[T]]
