@@ -1,10 +1,10 @@
 package com.github.andriimartynov.crdt.syntax
 
 import cats.kernel.{ BoundedSemilattice, Monoid }
-import com.github.andriimartynov.crdt.{ GCounter, KeyValueStore, PNCounter }
+import com.github.andriimartynov.crdt.{ KeyValueStore, PNCounter }
 import com.github.andriimartynov.crdt.kernel.NodeId.NodeId
-import com.github.andriimartynov.crdt.kernel.counters.CounterCRDT.CounterOp
-import com.github.andriimartynov.crdt.kernel.counters.PNCounter.PNCounterState
+import com.github.andriimartynov.crdt.CounterCRDT.CounterOp
+import com.github.andriimartynov.crdt.PNCounter.PNCounterState
 
 trait CounterSyntaxBinCompat0 {
   implicit final def catsSyntaxPNCounter[F[NodeId, Int]](

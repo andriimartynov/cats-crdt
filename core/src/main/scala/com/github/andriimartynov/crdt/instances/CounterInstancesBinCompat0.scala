@@ -1,7 +1,7 @@
 package com.github.andriimartynov.crdt.instances
 
 import cats.kernel.{ BoundedSemilattice, Eq, Monoid }
-import cats.syntax.semigroup._
+import cats.syntax.all._
 import com.github.andriimartynov.crdt.CounterCRDT.CounterOp
 import com.github.andriimartynov.crdt.{ KeyValueStore, PNCounter }
 import com.github.andriimartynov.crdt.NodeId.NodeId
@@ -27,8 +27,8 @@ trait CounterInstancesBinCompat0 {
   ): Eq[PNCounterState[F]] =
     Eq.instance[PNCounterState[F]] {
       case (x1, x2) =>
-        x1.inc == x2.inc &&
-          x1.dec == x2.dec
+        x1.inc === x2.inc &&
+          x1.dec === x2.dec
     }
 
   implicit def pnCounterInstance[F[_, _]](implicit

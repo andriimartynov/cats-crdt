@@ -4,6 +4,10 @@ import cats.kernel.Monoid
 import com.github.andriimartynov.crdt.kernel.NodeId.NodeId
 import com.github.andriimartynov.crdt.kernel.counters.PNCounter.PNCounterState
 
+/*
+ * PN-Counter (Positive-Negative Counter)
+ * https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type#PN-Counter_(Positive-Negative_Counter)
+ * */
 trait PNCounter[F[NodeId, Int]] extends CounterCRDT[PNCounterState[F]] {
   def decrement(
     t: PNCounterState[F]
