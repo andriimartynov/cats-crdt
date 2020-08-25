@@ -13,6 +13,7 @@ package object crdt {
   type LWWRegister[T]           = com.github.andriimartynov.crdt.kernel.registers.LWWRegister[T]
   type NodeId                   = com.github.andriimartynov.crdt.kernel.NodeId.NodeId
   type Timestamp                = com.github.andriimartynov.crdt.kernel.Timestamp.Timestamp
+  type TwoPSet[T]               = com.github.andriimartynov.crdt.kernel.sets.TwoPSet[T]
   type PNCounter[F[_, _]]       = com.github.andriimartynov.crdt.kernel.counters.PNCounter[F]
 
   val CounterCRDT = com.github.andriimartynov.crdt.kernel.counters.CounterCRDT
@@ -21,6 +22,7 @@ package object crdt {
   val LWWRegister = com.github.andriimartynov.crdt.kernel.registers.LWWRegister
   val NodeId      = com.github.andriimartynov.crdt.kernel.NodeId
   val Timestamp   = com.github.andriimartynov.crdt.kernel.Timestamp
+  val TwoPSet     = com.github.andriimartynov.crdt.kernel.sets.TwoPSet
   val PNCounter   = com.github.andriimartynov.crdt.kernel.counters.PNCounter
 
   implicit val longToLongOps: Long => LongOps = com.github.andriimartynov.crdt.kernel.longToLongOps

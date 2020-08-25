@@ -8,3 +8,4 @@ trait AllInstances
     with RegisterInstances
     with RegisterInstancesBinCompat0
     with SetInstances
+    with SetInstancesBinCompat0

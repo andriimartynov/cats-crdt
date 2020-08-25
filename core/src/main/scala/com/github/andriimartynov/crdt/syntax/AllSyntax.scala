@@ -6,3 +6,4 @@ trait AllSyntax
     with KeyValueStoreSyntax
     with RegisterSyntax
     with SetSyntax
+    with SetSyntaxBinCompat0

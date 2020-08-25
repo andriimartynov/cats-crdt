@@ -5,6 +5,6 @@ package object syntax {
   object counter  extends CounterSyntax with CounterSyntaxBinCompat0
   object kvs      extends KeyValueStoreSyntax
   object register extends RegisterSyntax
-  object set      extends SetSyntax
+  object set      extends SetSyntax with SetSyntaxBinCompat0
 
 }

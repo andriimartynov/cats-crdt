@@ -9,7 +9,7 @@ import com.github.andriimartynov.crdt.LWWRegister.LWWRegisterOp
 import com.github.andriimartynov.crdt.instances.all._
 import com.github.andriimartynov.crdt.kernel.laws.discipline.LWWRegisterTests
 import com.github.andriimartynov.crdt.{ longToLongOps, NodeId }
-import org.scalacheck.Arbitrary.{ arbInt, arbLong, arbString, arbitrary }
+import org.scalacheck.Arbitrary.{ arbInt, arbLong, arbString }
 import org.scalacheck.Gen.oneOf
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalatest.flatspec.AnyFlatSpecLike
